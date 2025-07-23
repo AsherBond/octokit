@@ -163,9 +163,6 @@ module Octokit
 
       # mask password
       inspected.gsub! @password, '*******' if @password
-      if @management_console_password
-        inspected.gsub! @management_console_password, '*******'
-      end
       inspected.gsub! @bearer_token, '********' if @bearer_token
       # Only show last 4 of token, secret
       if @access_token

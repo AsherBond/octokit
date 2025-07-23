@@ -90,18 +90,6 @@ module Octokit
         ENV.fetch('OCTOKIT_SECRET', nil)
       end
 
-      # Default management console password from ENV
-      # @return [String]
-      def management_console_password
-        ENV.fetch('OCTOKIT_ENTERPRISE_MANAGEMENT_CONSOLE_PASSWORD', nil)
-      end
-
-      # Default management console endpoint from ENV
-      # @return [String]
-      def management_console_endpoint
-        ENV.fetch('OCTOKIT_ENTERPRISE_MANAGEMENT_CONSOLE_ENDPOINT', nil)
-      end
-
       # Default GHES Manage API endpoint from ENV
       # @return [String]
       def manage_ghes_endpoint

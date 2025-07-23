@@ -100,7 +100,6 @@ Metrics/PerceivedComplexity:
 # Offense count: 1
 Naming/AccessorMethodName:
   Exclude:
-    - 'lib/octokit/enterprise_management_console_client/management_console.rb'
 
 # Offense count: 1
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
@@ -121,7 +120,6 @@ Style/Documentation:
     - 'spec/**/*'
     - 'test/**/*'
     - 'lib/octokit/client/users.rb'
-    - 'lib/octokit/enterprise_management_console_client/management_console.rb'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -159,7 +157,6 @@ Style/IfUnlessModifier:
     - 'lib/octokit/client/commits.rb'
     - 'lib/octokit/client/organizations.rb'
     - 'lib/octokit/client/repositories.rb'
-    - 'lib/octokit/enterprise_management_console_client/management_console.rb'
     - 'lib/octokit/error.rb'
     - 'lib/octokit/repository.rb'
     - 'spec/spec_helper.rb'

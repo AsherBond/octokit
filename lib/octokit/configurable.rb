@@ -28,10 +28,6 @@ module Octokit
     #   @return [Hash] Configure connection options for Faraday
     # @!attribute login
     #   @return [String] GitHub username for Basic Authentication
-    # @!attribute management_console_password
-    #   @return [String] An admin password set up for your GitHub Enterprise management console
-    # @!attribute management_console_endpoint
-    #   @return [String] Base URL for API requests to the GitHub Enterprise management console
     # @!attribute manage_ghes_endpoint
     #   @return [String] Base URL for API requests to the GitHub Enterprise Server Manage API
     # @!attribute manage_ghes_username
@@ -65,7 +61,6 @@ module Octokit
                   :middleware, :netrc, :netrc_file,
                   :per_page, :proxy, :ssl_verify_mode, :user_agent
     attr_writer :password, :web_endpoint, :api_endpoint, :login,
-                :management_console_endpoint, :management_console_password,
                 :manage_ghes_endpoint,
                 :manage_ghes_username,
                 :manage_ghes_password
@@ -84,8 +79,6 @@ module Octokit
           connection_options
           default_media_type
           login
-          management_console_endpoint
-          management_console_password
           manage_ghes_endpoint
           manage_ghes_username
           manage_ghes_password
@@ -132,10 +125,6 @@ module Octokit
 
     def api_endpoint
       File.join(@api_endpoint, '')
-    end
-
-    def management_console_endpoint
-      File.join(@management_console_endpoint, '')
     end
 
     def manage_ghes_endpoint

@@ -32,8 +32,7 @@ Upgrading? Check the [Upgrade Guide](#upgrading-guide) before bumping to a new
 10. [Working with GitHub Enterprise](#working-with-github-enterprise)
    1. [Interacting with the GitHub.com APIs in GitHub Enterprise](#interacting-with-the-githubcom-apis-in-github-enterprise)
    2. [Interacting with the GitHub Enterprise Admin APIs](#interacting-with-the-github-enterprise-admin-apis)
-   3. [Interacting with the GitHub Enterprise Management Console APIs](#interacting-with-the-github-enterprise-management-console-apis)
-   4. [SSL Connection Errors](#ssl-connection-errors)
+   3. [SSL Connection Errors](#ssl-connection-errors)
 11. [Configuration and defaults](#configuration-and-defaults)
     1. [Configuring module defaults](#configuring-module-defaults)
     2. [Using ENV variables](#using-env-variables)
@@ -160,7 +159,7 @@ When the API returns an error response, Octokit will raise a Ruby exception.
 A range of different exceptions can be raised depending on the error returned
 by the API - for example:
 
-* A `400 Bad Request` response will lead to an `Octokit::BadRequest` error 
+* A `400 Bad Request` response will lead to an `Octokit::BadRequest` error
 * A `403 Forbidden` error with a "rate limited exceeded" message will lead
   to a `Octokit::TooManyRequests` error
 
@@ -370,25 +369,6 @@ Octokit.configure do |c|
 end
 
 admin_client = Octokit.enterprise_admin_client.new
-```
-
-### Interacting with the GitHub Enterprise Management Console APIs
-
-The GitHub Enterprise Management Console APIs are also under a separate client: `EnterpriseManagementConsoleClient`. In order to use it, you'll need to provide both your management console password as well as the endpoint to your management console. This is different from the API endpoint provided above.
-
-```ruby
-management_console_client = Octokit::EnterpriseManagementConsoleClient.new(
-  :management_console_password => "secret",
-  :management_console_endpoint = "https://hostname:8633"
-)
-
-# or
-Octokit.configure do |c|
-  c.management_console_endpoint = "https://hostname:8633"
-  c.management_console_password = "secret"
-end
-
-management_console_client = Octokit.enterprise_management_console_client.new
 ```
 
 ### SSL Connection Errors
@@ -706,9 +686,7 @@ Octokit:
 | `OCTOKIT_TEST_GITHUB_ORGANIZATION`                           | Test organization.                                                                                                                                                                                |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_LOGIN`                       | GitHub Enterprise login name.                                                                                                                                                                     |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_TOKEN`                       | GitHub Enterprise token.                                                                                                                                                                          |
-| `OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_PASSWORD` | GitHub Enterprise management console password.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_ENDPOINT`                    | GitHub Enterprise hostname.                                                                                                                                                                       |
-| `OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_ENDPOINT` | GitHub Enterprise Management Console endpoint.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_ENDPOINT`                          | GitHub Enterprise Server GHES Manage Endpoint.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_USERNAME`                          | GitHub Enterprise Server GHES Manage Username.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_PASSWORD`                          | GitHub Enterprise Server GHES Manage Password.                                                                                                                                                    |
