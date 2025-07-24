@@ -32,7 +32,8 @@ Upgrading? Check the [Upgrade Guide](#upgrading-guide) before bumping to a new
 10. [Working with GitHub Enterprise](#working-with-github-enterprise)
    1. [Interacting with the GitHub.com APIs in GitHub Enterprise](#interacting-with-the-githubcom-apis-in-github-enterprise)
    2. [Interacting with the GitHub Enterprise Admin APIs](#interacting-with-the-github-enterprise-admin-apis)
-   3. [SSL Connection Errors](#ssl-connection-errors)
+   3. [Interacting with the GHES Manage API](#interacting-with-the-ghes-manage-api)
+   4. [SSL Connection Errors](#ssl-connection-errors)
 11. [Configuration and defaults](#configuration-and-defaults)
     1. [Configuring module defaults](#configuring-module-defaults)
     2. [Using ENV variables](#using-env-variables)
@@ -368,7 +369,30 @@ Octokit.configure do |c|
   c.access_token = "<your 40 char token>"
 end
 
-admin_client = Octokit.enterprise_admin_client.new
+admin_client = Octokit.enterprise_admin_client
+```
+
+### Interacting with the GHES (GitHub Enterprise Server) Manage API
+
+The GHES Manage API is also under a separate client: `ManageGHESClient`. In order to use it, you'll need to provide your username and password, along with the endpoint to your ghes instance. This is different from the API endpoint provided above.
+
+If you do not provide a username, the root site administrator account will be used.
+
+```ruby
+ghes_client = Octokit::ManageGHESClient.new(
+  :manage_ghes_endpoint = "https://hostname:8443"
+  :manage_ghes_username => "username",
+  :manage_ghes_password => "password",
+)
+
+# or
+Octokit.configure do |c|
+  c.manage_ghes_endpoint = "https://hostname:8443"
+  c.manage_ghes_username => "username"
+  c.manage_ghes_password => "password"
+end
+
+ghes_client = Octokit.manage_ghes_client
 ```
 
 ### SSL Connection Errors
@@ -512,7 +536,11 @@ construction currently used throughout the client.
 
 ## Upgrading guide
 
-Version 4.0
+### Management Console API Removal
+
+[In GHES 3.15, the management console API was removed](https://docs.github.com/en/enterprise-server@3.15/admin/release-notes#3.15.0-retired). If you have any tooling that is using this API, you should transition to using the [Manage GHES API](#interacting-with-the-ghes-manage-api) instead.
+
+### Version 4.0
 
 - **removes support for a [long-deprecated overload][list-pulls] for
   passing state as a positional argument** when listing pull requests. Instead,
