@@ -32,7 +32,7 @@ Upgrading? Check the [Upgrade Guide](#upgrading-guide) before bumping to a new
 10. [Working with GitHub Enterprise](#working-with-github-enterprise)
    1. [Interacting with the GitHub.com APIs in GitHub Enterprise](#interacting-with-the-githubcom-apis-in-github-enterprise)
    2. [Interacting with the GitHub Enterprise Admin APIs](#interacting-with-the-github-enterprise-admin-apis)
-   3. [Interacting with the GitHub Enterprise Management Console APIs](#interacting-with-the-github-enterprise-management-console-apis)
+   3. [Interacting with the GHES Manage API](#interacting-with-the-ghes-manage-api)
    4. [SSL Connection Errors](#ssl-connection-errors)
 11. [Configuration and defaults](#configuration-and-defaults)
     1. [Configuring module defaults](#configuring-module-defaults)
@@ -160,7 +160,7 @@ When the API returns an error response, Octokit will raise a Ruby exception.
 A range of different exceptions can be raised depending on the error returned
 by the API - for example:
 
-* A `400 Bad Request` response will lead to an `Octokit::BadRequest` error 
+* A `400 Bad Request` response will lead to an `Octokit::BadRequest` error
 * A `403 Forbidden` error with a "rate limited exceeded" message will lead
   to a `Octokit::TooManyRequests` error
 
@@ -369,26 +369,30 @@ Octokit.configure do |c|
   c.access_token = "<your 40 char token>"
 end
 
-admin_client = Octokit.enterprise_admin_client.new
+admin_client = Octokit.enterprise_admin_client
 ```
 
-### Interacting with the GitHub Enterprise Management Console APIs
+### Interacting with the GHES (GitHub Enterprise Server) Manage API
 
-The GitHub Enterprise Management Console APIs are also under a separate client: `EnterpriseManagementConsoleClient`. In order to use it, you'll need to provide both your management console password as well as the endpoint to your management console. This is different from the API endpoint provided above.
+The GHES Manage API is also under a separate client: `ManageGHESClient`. In order to use it, you'll need to provide your username and password, along with the endpoint to your ghes instance. This is different from the API endpoint provided above.
+
+If you do not provide a username, the root site administrator account will be used.
 
 ```ruby
-management_console_client = Octokit::EnterpriseManagementConsoleClient.new(
-  :management_console_password => "secret",
-  :management_console_endpoint = "https://hostname:8633"
+ghes_client = Octokit::ManageGHESClient.new(
+  :manage_ghes_endpoint = "https://hostname:8443"
+  :manage_ghes_username => "username",
+  :manage_ghes_password => "password",
 )
 
 # or
 Octokit.configure do |c|
-  c.management_console_endpoint = "https://hostname:8633"
-  c.management_console_password = "secret"
+  c.manage_ghes_endpoint = "https://hostname:8443"
+  c.manage_ghes_username => "username"
+  c.manage_ghes_password => "password"
 end
 
-management_console_client = Octokit.enterprise_management_console_client.new
+ghes_client = Octokit.manage_ghes_client
 ```
 
 ### SSL Connection Errors
@@ -532,7 +536,11 @@ construction currently used throughout the client.
 
 ## Upgrading guide
 
-Version 4.0
+### Management Console API Removal
+
+[In GHES 3.15, the management console API was removed](https://docs.github.com/en/enterprise-server@3.15/admin/release-notes#3.15.0-retired). If you have any tooling that is using this API, you should transition to using the [Manage GHES API](#interacting-with-the-ghes-manage-api) instead.
+
+### Version 4.0
 
 - **removes support for a [long-deprecated overload][list-pulls] for
   passing state as a positional argument** when listing pull requests. Instead,
@@ -706,9 +714,7 @@ Octokit:
 | `OCTOKIT_TEST_GITHUB_ORGANIZATION`                           | Test organization.                                                                                                                                                                                |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_LOGIN`                       | GitHub Enterprise login name.                                                                                                                                                                     |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_TOKEN`                       | GitHub Enterprise token.                                                                                                                                                                          |
-| `OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_PASSWORD` | GitHub Enterprise management console password.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_ENTERPRISE_ENDPOINT`                    | GitHub Enterprise hostname.                                                                                                                                                                       |
-| `OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_ENDPOINT` | GitHub Enterprise Management Console endpoint.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_ENDPOINT`                          | GitHub Enterprise Server GHES Manage Endpoint.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_USERNAME`                          | GitHub Enterprise Server GHES Manage Username.                                                                                                                                                    |
 | `OCTOKIT_TEST_GITHUB_MANAGE_GHES_PASSWORD`                          | GitHub Enterprise Server GHES Manage Password.                                                                                                                                                    |

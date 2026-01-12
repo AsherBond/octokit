@@ -70,12 +70,6 @@ VCR.configure do |c| # rubocop:disable Metrics/BlockLength
   c.filter_sensitive_data('<<ENTERPRISE_ACCESS_TOKEN>>') do
     test_github_enterprise_token
   end
-  c.filter_sensitive_data('<<ENTERPRISE_MANAGEMENT_CONSOLE_PASSWORD>>') do
-    test_github_enterprise_management_console_password
-  end
-  c.filter_sensitive_data('<<ENTERPRISE_MANAGEMENT_CONSOLE_ENDPOINT>>') do
-    test_github_enterprise_management_console_endpoint
-  end
   c.filter_sensitive_data('<<MANAGE_GHES_ENDPOINT>>') do
     test_github_manage_ghes_endpoint
   end
@@ -209,14 +203,6 @@ def test_github_enterprise_token
   ENV.fetch 'OCTOKIT_TEST_GITHUB_ENTERPRISE_TOKEN', 'x' * 40
 end
 
-def test_github_enterprise_management_console_password
-  ENV.fetch 'OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_PASSWORD', 'Secretpa55'
-end
-
-def test_github_enterprise_management_console_endpoint
-  ENV.fetch 'OCTOKIT_TEST_GITHUB_ENTERPRISE_MANAGEMENT_CONSOLE_ENDPOINT', 'https://enterprise.github.dev:8443/'
-end
-
 def test_github_enterprise_endpoint
   ENV.fetch 'OCTOKIT_TEST_GITHUB_ENTERPRISE_ENDPOINT', 'http://enterprise.github.dev/api/v3/'
 end
@@ -316,10 +302,6 @@ def github_enterprise_url(url)
   test_github_enterprise_endpoint + url
 end
 
-def github_management_console_url(url)
-  test_github_enterprise_management_console_endpoint + url
-end
-
 def github_manage_ghes_url(url)
   test_github_manage_ghes_endpoint + url
 end
@@ -361,24 +343,6 @@ def oauth_client_with_http_cache_middleware(access_token: test_github_token)
   end
 
   client = oauth_client(access_token: access_token)
-
-  client.configure do |c|
-    c.middleware = stack
-  end
-  client
-end
-
-def enterprise_management_console_client
-  stack = Faraday::RackBuilder.new do |builder|
-    builder.request :multipart
-    builder.request :url_encoded
-    builder.adapter Faraday.default_adapter
-  end
-
-  client = Octokit::EnterpriseManagementConsoleClient.new \
-    management_console_endpoint: test_github_enterprise_management_console_endpoint,
-    management_console_password: test_github_enterprise_management_console_password,
-    connection_options: { ssl: { verify: false } }
 
   client.configure do |c|
     c.middleware = stack
